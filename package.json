@@ -1,0 +1,25 @@
+{
+  "name": "api-themoviedb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/castanedaLuis/API-REST-Movies.git"
+  },
+  "keywords": [
+    "node",
+    "API",
+    "REST",
+    "javascript"
+  ],
+  "author": "Jose Luis Castañeda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/castanedaLuis/API-REST-Movies/issues"
+  },
+  "homepage": "https://github.com/castanedaLuis/API-REST-Movies#readme"
+}
