@@ -172,6 +172,7 @@ async function getMovieById(id){
     const movie = await respuesta.json()
 
     headerSection.innerHTML = ''
+    headerSection.appendChild(arrowBtn)
     const imgMovieHeader = document.createElement('img')
     imgMovieHeader.src='https://image.tmdb.org/t/p/w500' + movie.poster_path;
     imgMovieHeader.classList.add('img-movie')
