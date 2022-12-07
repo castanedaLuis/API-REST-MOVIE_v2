@@ -36,6 +36,7 @@ async function getMovieTendenciasPreview(){
     const data = await respuesta.json()
     const movies = data.results
     //console.log(movies);
+    maxPage = data.total_pages
     createMovies(movies, trendingMoviesPreviewList, true);
 }
 
@@ -119,6 +120,7 @@ async function getMoviesBySearch(query){
 }
 
 let page = 1;
+let maxPage
 
 window.addEventListener('scroll',getGeneritedPageMovieTendencias)
 
@@ -128,7 +130,9 @@ async function getGeneritedPageMovieTendencias (){
 
   const scrollIsFinal = (scrollTop + clientHeight) >= (scrollHeight - 15)
 
-  if(scrollIsFinal){
+  const pageIsNotMax = page < maxPage 
+
+  if(scrollIsFinal && pageIsNotMax){
       page++
       const respuesta = await fetch(`${URL}/trending/movie/day?page=${page}&api_key=${API_KEY}`)
       const data = await respuesta.json()
