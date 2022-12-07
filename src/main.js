@@ -75,21 +75,22 @@ async function getMovieByCategory(id){
     const moviesTheCategory = data.results
     //console.log('idCategory',moviesTheCategory);
 
-    const arrayNodos = []
-    genericSection.innerHTML = ''
-    moviesTheCategory.forEach(movie =>{
-        const movieContainer = document.createElement('div')
-        movieContainer.classList.add('movie-container')
+    createMovies(moviesTheCategory, genericSection, true);
+    // const arrayNodos = []
+    // genericSection.innerHTML = ''
+    // moviesTheCategory.forEach(movie =>{
+    //     const movieContainer = document.createElement('div')
+    //     movieContainer.classList.add('movie-container')
 
-        const movieImg = document.createElement('img')
-        movieImg.classList.add('movie-img')
-        movieImg.setAttribute('alt', movie.title)
-        movieImg.src= `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+    //     const movieImg = document.createElement('img')
+    //     movieImg.classList.add('movie-img')
+    //     movieImg.setAttribute('alt', movie.title)
+    //     movieImg.src= `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
 
-        movieContainer.appendChild(movieImg)
-        arrayNodos.push(movieContainer)
-    })
-    genericSection.append(...arrayNodos)
+    //     movieContainer.appendChild(movieImg)
+    //     arrayNodos.push(movieContainer)
+    // })
+    // genericSection.append(...arrayNodos)
 }
 
 
@@ -99,21 +100,22 @@ async function getMoviesBySearch(query){
     const moviesSearch = data.results
     //console.log('moviesSearch',moviesSearch);
 
-    const arrayNodos = []
-    genericSection.innerHTML = ''
-    moviesSearch.forEach(movie =>{
-        const movieContainer = document.createElement('div')
-        movieContainer.classList.add('movie-container')
+    createMovies(moviesSearch, genericSection, true);
+    // const arrayNodos = []
+    // genericSection.innerHTML = ''
+    // moviesSearch.forEach(movie =>{
+    //     const movieContainer = document.createElement('div')
+    //     movieContainer.classList.add('movie-container')
 
-        const movieImg = document.createElement('img')
-        movieImg.classList.add('movie-img')
-        movieImg.setAttribute('alt', movie.title)
-        movieImg.src= `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+    //     const movieImg = document.createElement('img')
+    //     movieImg.classList.add('movie-img')
+    //     movieImg.setAttribute('alt', movie.title)
+    //     movieImg.src= `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
 
-        movieContainer.appendChild(movieImg)
-        arrayNodos.push(movieContainer)
-    })
-    genericSection.append(...arrayNodos)
+    //     movieContainer.appendChild(movieImg)
+    //     arrayNodos.push(movieContainer)
+    // })
+    // genericSection.append(...arrayNodos)
 }
 
 
@@ -121,23 +123,23 @@ async function getMovieTendencias(){
     const respuesta = await fetch(`${URL}/trending/movie/day?api_key=${API_KEY}`)
     const data = await respuesta.json()
     const movies = data.results
-    console.log(movies);
+    //console.log(movies);
+    createMovies(movies, genericSection, true);
+    // const arrayNodos = []
+    // genericSection.innerHTML = ''
+    // movies.forEach(movie =>{
+    //     const movieContainer = document.createElement('div')
+    //     movieContainer.classList.add('movie-container')
 
-    const arrayNodos = []
-    genericSection.innerHTML = ''
-    movies.forEach(movie =>{
-        const movieContainer = document.createElement('div')
-        movieContainer.classList.add('movie-container')
+    //     const movieImg = document.createElement('img')
+    //     movieImg.classList.add('movie-img')
+    //     movieImg.setAttribute('alt', movie.title)
+    //     movieImg.src= `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
 
-        const movieImg = document.createElement('img')
-        movieImg.classList.add('movie-img')
-        movieImg.setAttribute('alt', movie.title)
-        movieImg.src= `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
-
-        movieContainer.appendChild(movieImg)
-        arrayNodos.push(movieContainer)
-    })
-    genericSection.append(...arrayNodos)
+    //     movieContainer.appendChild(movieImg)
+    //     arrayNodos.push(movieContainer)
+    // })
+    // genericSection.append(...arrayNodos)
 }
 
 function createCategories(categories, container) {
@@ -211,6 +213,13 @@ function createMovies(movies, container, lazyLoad = false) {
         'https://image.tmdb.org/t/p/w300' + movie.poster_path,
       );
       // movieImg.setAttribute('loading','lazy')
+
+      movieImg.addEventListener('error', () => {
+        movieImg.setAttribute(
+          'src',
+          `https://via.placeholder.com/300x450/5c218a/ffffff?text=${movie.title}`,
+        );
+      })
   
         if(lazyLoad){
           lazyLoading.observe(movieImg)
