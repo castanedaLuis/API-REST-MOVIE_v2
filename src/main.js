@@ -118,20 +118,31 @@ async function getMoviesBySearch(query){
     // genericSection.append(...arrayNodos)
 }
 
-let page = 1
+let page = 1;
+
+window.addEventListener('scroll',getGeneritedPageMovieTendencias)
 
 async function getGeneritedPageMovieTendencias (){
-  page++
-  const respuesta = await fetch(`${URL}/trending/movie/day?page=${page}&api_key=${API_KEY}`)
-  const data = await respuesta.json()
-  const movies = data.results
-  createMovies(movies, genericSection, {lazyLoad: true, clean:false});
 
-  genericSection.removeChild(btnLoadMores)
-  const btnLoadMores = document.createElement('button')
-  btnLoadMores.textContent ='Cargar más'
-  btnLoadMores.addEventListener('click',getGeneritedPageMovieTendencias)
-  genericSection.appendChild(btnLoadMores)
+  const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
+
+  const scrollIsFinal = (scrollTop + clientHeight) >= (scrollHeight - 15)
+
+  if(scrollIsFinal){
+      page++
+      const respuesta = await fetch(`${URL}/trending/movie/day?page=${page}&api_key=${API_KEY}`)
+      const data = await respuesta.json()
+      const movies = data.results
+      createMovies(movies, genericSection, {lazyLoad: true, clean:false});
+  }
+
+   //PAGINATION
+
+  // genericSection.removeChild(btnLoadMores)
+  // const btnLoadMores = document.createElement('button')
+  // btnLoadMores.textContent ='Cargar más'
+  // btnLoadMores.addEventListener('click',getGeneritedPageMovieTendencias)
+  // genericSection.appendChild(btnLoadMores)
 }
 
 
@@ -142,10 +153,12 @@ async function getMovieTendencias(){
 
     createMovies(movies, genericSection, {lazyLoad: true, clean:true});
 
-    const btnLoadMores = document.createElement('button')
-    btnLoadMores.textContent ='Cargar más'
-    btnLoadMores.addEventListener('click',getGeneritedPageMovieTendencias)
-    genericSection.appendChild(btnLoadMores)
+    // const btnLoadMores = document.createElement('button')
+    // btnLoadMores.textContent ='Cargar más'
+    // btnLoadMores.addEventListener('click',getGeneritedPageMovieTendencias)
+    // genericSection.appendChild(btnLoadMores)
+
+
     // const arrayNodos = []
     // genericSection.innerHTML = ''
     // movies.forEach(movie =>{
@@ -271,7 +284,8 @@ export { getMovieCategoriesPreview,
     getMovieByCategory,
     getMoviesBySearch, 
     getMovieTendencias,
-    getMovieById}
+    getMovieById,
+    getGeneritedPageMovieTendencias}
 
 
 // getMovieTendenciasPreview()

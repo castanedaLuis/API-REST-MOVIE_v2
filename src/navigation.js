@@ -3,7 +3,11 @@ import {getMovieCategoriesPreview,
          getMovieByCategory, 
          getMoviesBySearch,
          getMovieTendencias,
-         getMovieById} from './main.js'
+         getMovieById,
+         getGeneritedPageMovieTendencias} from './main.js'
+
+
+let infiniteScroll;
 
 searchFormBtn.addEventListener('click',()=>{
     const valueInput = searchFormInput.value;
@@ -22,9 +26,16 @@ arrowBtn.addEventListener('click',()=>{
 window.addEventListener('DOMContentLoaded', navigator, false)
 //Capturar el evento hashchange para verificar que pagina mostrar
 window.addEventListener('hashchange', navigator, false)
+//Scroll infinito
+window.addEventListener('scroll',infiniteScroll, false)
 
 function navigator(){
     //console.log(location)
+    // Quitamos el evento de scroll 
+    if (infiniteScroll) {
+        window.removeEventListener('scroll', infiniteScroll, { passive: false });
+        infiniteScroll = undefined;
+      }
 
     if(location.hash.startsWith('#trends'))
     {
@@ -39,6 +50,11 @@ function navigator(){
         home()
     }
     smoothscroll()
+
+    // Agregamos el evento de scroll para ejecutarlo
+    if (infiniteScroll) {
+        window.addEventListener('scroll', infiniteScroll, { passive: false });
+    }
 }
 function home(){
     console.log('home');
@@ -78,6 +94,8 @@ function trendsPage(){
 
     headerCategoryTitle.innerHTML='Tendencias'
     getMovieTendencias()
+
+    infiniteScroll = getGeneritedPageMovieTendencias;
 }
 function categoriesPage(){
     console.log('category');
@@ -146,7 +164,6 @@ function searchPage(){
 
 
 //Scroll to top 
-
 function smoothscroll(){
     const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
     if (currentScroll > 0) {
