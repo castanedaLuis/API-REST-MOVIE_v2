@@ -17,32 +17,26 @@ import { API_KEY } from "./secrets.js";
 
 const URL = 'https://api.themoviedb.org/3'
 
+//OBSERVADOR
+
+const lazyLoading = new IntersectionObserver( (entries) =>{
+  entries.forEach((entry) =>{
+    if(entry.isIntersecting){
+      //console.log(entry);
+      const url = entry.target.getAttribute('data-img')
+      entry.target.setAttribute('src',url)
+    }
+  })
+});
+
+
 
 async function getMovieTendenciasPreview(){
     const respuesta = await fetch(`${URL}/trending/movie/day?api_key=${API_KEY}`)
     const data = await respuesta.json()
     const movies = data.results
     //console.log(movies);
-
-    const arrayNodos = []
-    const trendingPreviewMoviesContainer = document.querySelector('#trendingPreview .trendingPreview-movieList')
-    trendingPreviewMoviesContainer.innerHTML = ''
-    movies.forEach(movie =>{
-        const movieContainer = document.createElement('div')
-        movieContainer.classList.add('movie-container')
-        movieContainer.addEventListener('click',() =>{
-            location.hash = `#movie=${movie.id}`
-        })
-
-        const movieImg = document.createElement('img')
-        movieImg.classList.add('movie-img')
-        movieImg.setAttribute('alt', movie.title)
-        movieImg.src= `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
-
-        movieContainer.appendChild(movieImg)
-        arrayNodos.push(movieContainer)
-    })
-    trendingPreviewMoviesContainer.append(...arrayNodos)
+    createMovies(movies, trendingMoviesPreviewList, true);
 }
 
 async function getMovieCategoriesPreview(){
@@ -199,7 +193,7 @@ async function getMovieById(id){
 
 }
 
-function createMovies(movies, container) {
+function createMovies(movies, container, lazyLoad = false) {
     container.innerHTML = '';
   
     movies.forEach(movie => {
@@ -213,10 +207,15 @@ function createMovies(movies, container) {
       movieImg.classList.add('movie-img');
       movieImg.setAttribute('alt', movie.title);
       movieImg.setAttribute(
-        'src',
+        lazyLoad ? 'data-img' : 'src',
         'https://image.tmdb.org/t/p/w300' + movie.poster_path,
       );
+      // movieImg.setAttribute('loading','lazy')
   
+        if(lazyLoad){
+          lazyLoading.observe(movieImg)
+        }
+
       movieContainer.appendChild(movieImg);
       container.appendChild(movieContainer);
     });
@@ -229,13 +228,18 @@ async function getSimilaresMovieId(id){
     const data = await resonse.json()
     const similares = data.results
 
-    createMovies(similares,relatedMoviesContainer)
+    createMovies(similares,relatedMoviesContainer, true)
 }
 
 
 
 
-export { getMovieCategoriesPreview, getMovieTendenciasPreview, getMovieByCategory,getMoviesBySearch, getMovieTendencias,getMovieById}
+export { getMovieCategoriesPreview, 
+    getMovieTendenciasPreview, 
+    getMovieByCategory,
+    getMoviesBySearch, 
+    getMovieTendencias,
+    getMovieById}
 
 
 // getMovieTendenciasPreview()

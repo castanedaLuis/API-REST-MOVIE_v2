@@ -242,6 +242,7 @@ button {
   width: 150px;
   min-width: 150px;
   max-width: 150px;
+  aspect-ratio: 150 / 225;
 }
 
 
@@ -411,6 +412,17 @@ footer {
   50% {
     opacity: 0%;
   }
+}
+
+
+/* image responsive */
+.img-responsive {
+	aspect-ratio: 2 / 3; 
+	border-radius: 1rem;
+	height: auto;
+	object-fit: cover;
+	vertical-align: top;
+	width: 100%;
 }
 
 
