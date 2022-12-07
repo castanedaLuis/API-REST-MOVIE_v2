@@ -239,19 +239,26 @@ function createMovies(movies, container, {lazyLoad = false, clean = true} = {}) 
     }
   
     movies.forEach(movie => {
+      
       const movieContainer = document.createElement('div');
       movieContainer.classList.add('movie-container');
-      movieContainer.addEventListener('click', () => {
+      movieContainer.addEventListener('click', (e) => {
         location.hash = '#movie=' + movie.id;
       });
   
       const movieImg = document.createElement('img');
       movieImg.classList.add('movie-img');
       movieImg.setAttribute('alt', movie.title);
+
+      // movieImg.addEventListener('click', () => {
+      //   location.hash = '#movie=' + movie.id;
+      // });
+
       movieImg.setAttribute(
         lazyLoad ? 'data-img' : 'src',
         'https://image.tmdb.org/t/p/w300' + movie.poster_path,
       );
+
       // movieImg.setAttribute('loading','lazy')
 
       movieImg.addEventListener('error', () => {
@@ -260,12 +267,21 @@ function createMovies(movies, container, {lazyLoad = false, clean = true} = {}) 
           `https://via.placeholder.com/300x450/5c218a/ffffff?text=${movie.title}`,
         );
       })
+
+      const movieBtn = document.createElement('button');
+      movieBtn.classList.add('movie-btn')
+      movieBtn.addEventListener('click', (e) =>{
+        console.log('liked');
+        e.stopPropagation();
+        movieBtn.classList.toggle('movie-btn--liked')
+      })
   
-        if(lazyLoad){
-          lazyLoading.observe(movieImg)
-        }
+      if(lazyLoad){
+        lazyLoading.observe(movieImg)
+      }
 
       movieContainer.appendChild(movieImg);
+      movieContainer.appendChild(movieBtn);
       container.appendChild(movieContainer);
     });
   }
