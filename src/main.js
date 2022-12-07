@@ -118,13 +118,34 @@ async function getMoviesBySearch(query){
     // genericSection.append(...arrayNodos)
 }
 
+let page = 1
+
+async function getGeneritedPageMovieTendencias (){
+  page++
+  const respuesta = await fetch(`${URL}/trending/movie/day?page=${page}&api_key=${API_KEY}`)
+  const data = await respuesta.json()
+  const movies = data.results
+  createMovies(movies, genericSection, {lazyLoad: true, clean:false});
+
+  genericSection.removeChild(btnLoadMores)
+  const btnLoadMores = document.createElement('button')
+  btnLoadMores.textContent ='Cargar más'
+  btnLoadMores.addEventListener('click',getGeneritedPageMovieTendencias)
+  genericSection.appendChild(btnLoadMores)
+}
+
 
 async function getMovieTendencias(){
     const respuesta = await fetch(`${URL}/trending/movie/day?api_key=${API_KEY}`)
     const data = await respuesta.json()
     const movies = data.results
-    //console.log(movies);
-    createMovies(movies, genericSection, true);
+
+    createMovies(movies, genericSection, {lazyLoad: true, clean:true});
+
+    const btnLoadMores = document.createElement('button')
+    btnLoadMores.textContent ='Cargar más'
+    btnLoadMores.addEventListener('click',getGeneritedPageMovieTendencias)
+    genericSection.appendChild(btnLoadMores)
     // const arrayNodos = []
     // genericSection.innerHTML = ''
     // movies.forEach(movie =>{
@@ -195,8 +216,10 @@ async function getMovieById(id){
 
 }
 
-function createMovies(movies, container, lazyLoad = false) {
-    container.innerHTML = '';
+function createMovies(movies, container, {lazyLoad = false, clean = true} = {}) {
+    if(clean){
+      container.innerHTML = ''
+    }
   
     movies.forEach(movie => {
       const movieContainer = document.createElement('div');
