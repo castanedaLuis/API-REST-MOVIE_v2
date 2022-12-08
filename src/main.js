@@ -334,10 +334,18 @@ async function getSimilaresMovieId(id){
 
 function getLikedMovies(){
   const list = likedMoviesList()
-  const listArray = Object.values(list)
-
-  createMovies(listArray,likedMoviesListArticle, {lazyLoading:true, clean:true})
-  //console.log(list);
+  if(Object.values(list).length > 0){
+    const listArray = Object.values(list)
+  
+    createMovies(listArray,likedMoviesListArticle, {lazyLoading:true, clean:true})
+    console.log(Object.values(list));
+  }else{
+    
+    const h2 = document.createElement('h2')
+    h2.textContent= 'No tienes ninguna pelicula como favorita 😞'
+    h2.style='color:black'
+    likedMoviesListArticle.appendChild(h2)
+  }
 
 
 }

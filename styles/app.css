@@ -105,6 +105,7 @@ button {
   cursor: pointer;
   position: relative;
 }
+
 .movie-container--loading {
   background: var(--purple-light-2);
   border-radius: 8px;
@@ -127,6 +128,10 @@ button {
 .movie-img {
   border-radius: 8px;
   min-height: 175px;
+}
+
+.movie-img:hover{
+  width: 300px;
 }
 
 .movie-btn{
@@ -500,7 +505,7 @@ footer {
 @media (max-width: 548px) {
   .img-movie{
     width: 100%;
-    height: 400px;
+    height: 350px;
     object-fit: contain;
   }
 }
