@@ -18,7 +18,6 @@ import { API_KEY } from "./secrets.js";
 const URL = 'https://api.themoviedb.org/3'
 
 //OBSERVADOR
-
 const lazyLoading = new IntersectionObserver( (entries) =>{
   entries.forEach((entry) =>{
     if(entry.isIntersecting){
@@ -38,6 +37,7 @@ async function getMovieTendenciasPreview(){
     //console.log(movies);
     maxPage = data.total_pages
     createMovies(movies, trendingMoviesPreviewList, true);
+  
 }
 
 async function getMovieCategoriesPreview(){
@@ -149,7 +149,6 @@ async function getGeneritedPageMovieTendencias (){
   // genericSection.appendChild(btnLoadMores)
 }
 
-
 async function getMovieTendencias(){
     const respuesta = await fetch(`${URL}/trending/movie/day?api_key=${API_KEY}`)
     const data = await respuesta.json()
@@ -233,13 +232,40 @@ async function getMovieById(id){
 
 }
 
+//TODO Regresa la data del localStorage
+function likedMoviesList(){
+  const item = JSON.parse(localStorage.getItem('liked-Movies'));
+  let movies;
+
+  if(item){
+    movies = item;
+  }else{
+    movies = {};
+  }
+  return movies
+}
+
+function likeMovie(movie){
+  const likedMovies = likedMoviesList()
+  //console.log(likedMovies);
+
+  if(likedMovies[movie.id]){
+    //Remover localstorage
+    likedMovies[movie.id] = undefined;
+  }else{
+    //agregar a localstorage
+    likedMovies[movie.id] = movie
+  }
+  localStorage.setItem('liked-Movies',JSON.stringify(likedMovies))
+}
+
 function createMovies(movies, container, {lazyLoad = false, clean = true} = {}) {
     if(clean){
       container.innerHTML = ''
     }
   
     movies.forEach(movie => {
-      
+
       const movieContainer = document.createElement('div');
       movieContainer.classList.add('movie-container');
       movieContainer.addEventListener('click', (e) => {
@@ -270,8 +296,11 @@ function createMovies(movies, container, {lazyLoad = false, clean = true} = {}) 
 
       const movieBtn = document.createElement('button');
       movieBtn.classList.add('movie-btn')
+      likedMoviesList()[movie.id] && movieBtn.classList.add('movie-btn--liked')
       movieBtn.addEventListener('click', (e) =>{
-        console.log('liked');
+        //Guardamos en Localstorage
+        likeMovie(movie)
+        getLikedMovies()
         e.stopPropagation();
         movieBtn.classList.toggle('movie-btn--liked')
       })
@@ -296,6 +325,16 @@ async function getSimilaresMovieId(id){
     createMovies(similares,relatedMoviesContainer, true)
 }
 
+function getLikedMovies(){
+  const list = likedMoviesList()
+  const listArray = Object.values(list)
+
+  createMovies(listArray,likedMoviesListArticle, {lazyLoading:true, clean:true})
+  console.log(list);
+
+
+}
+
 
 
 
@@ -305,7 +344,8 @@ export { getMovieCategoriesPreview,
     getMoviesBySearch, 
     getMovieTendencias,
     getMovieById,
-    getGeneritedPageMovieTendencias}
+    getGeneritedPageMovieTendencias,
+    getLikedMovies}
 
 
 // getMovieTendenciasPreview()
