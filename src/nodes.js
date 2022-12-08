@@ -30,3 +30,10 @@ const movieDetailScore = document.querySelector('.movieDetail-score');
 const imgHeader = document.querySelector('.img-movie');
 
 
+//Lenguages
+const languagesSection = document.querySelector('.language');
+const languagesList = document.querySelector('.list-language');
+
+
+
+

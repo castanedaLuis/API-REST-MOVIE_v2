@@ -454,6 +454,18 @@ footer {
 	width: 100%;
 }
 
+#language{
+  margin-left: 24px;
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+#languageSelect{
+  border: none;
+  background-color: transparent;
+}
+
 
 /* media queries */
 

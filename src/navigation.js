@@ -5,7 +5,8 @@ import {getMovieCategoriesPreview,
          getMovieTendencias,
          getMovieById,
          getGeneritedPageMovieTendencias,
-         getLikedMovies} from './main.js'
+         getLikedMovies,
+         getIdioma} from './main.js'
 
 
 let infiniteScroll;
@@ -24,13 +25,21 @@ arrowBtn.addEventListener('click',()=>{
 })
 
 //Cargar la funcion navigator para verificar la URL
-window.addEventListener('DOMContentLoaded', navigator, false)
+window.addEventListener('DOMContentLoaded', navigatorLocal, false)
+
 //Capturar el evento hashchange para verificar que pagina mostrar
-window.addEventListener('hashchange', navigator, false)
+window.addEventListener('hashchange', navigatorLocal, false)
+
+//idioma
+const lenguajeSelect = document.querySelector('#languageSelect')
+lenguajeSelect.addEventListener('change', getIdioma, false)
 //Scroll infinito
 window.addEventListener('scroll',infiniteScroll, false)
 
-function navigator(){
+
+
+
+function navigatorLocal(){
     //console.log(location)
     // Quitamos el evento de scroll 
     if (infiniteScroll) {
@@ -59,7 +68,6 @@ function navigator(){
 }
 function home(){
     // console.log('home');
-
     headerSection.classList.remove('header-container--long')
     headerSection.style.background = '';
     arrowBtn.classList.add('inactive');
@@ -77,6 +85,7 @@ function home(){
     getMovieTendenciasPreview()
     getMovieCategoriesPreview()
     getLikedMovies()
+ 
 
 }
 function trendsPage(){
@@ -168,7 +177,6 @@ function searchPage(){
     getMoviesBySearch(query)
 
 }
-
 
 //Scroll to top 
 function smoothscroll(){

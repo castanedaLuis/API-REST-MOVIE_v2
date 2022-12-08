@@ -17,6 +17,9 @@ import { API_KEY } from "./secrets.js";
 
 const URL = 'https://api.themoviedb.org/3'
 
+let lenguaje = navigator.language
+// console.log('🌎',lenguaje);
+
 //OBSERVADOR
 const lazyLoading = new IntersectionObserver( (entries) =>{
   entries.forEach((entry) =>{
@@ -28,10 +31,14 @@ const lazyLoading = new IntersectionObserver( (entries) =>{
   })
 });
 
-
+function getIdioma(){
+  const lenguajeSelect = document.querySelector('#languageSelect')
+  lenguaje = lenguajeSelect.value
+  console.log('🌎',lenguaje);
+}
 
 async function getMovieTendenciasPreview(){
-    const respuesta = await fetch(`${URL}/trending/movie/day?api_key=${API_KEY}`)
+    const respuesta = await fetch(`${URL}/trending/movie/day?language=${lenguaje}&api_key=${API_KEY}`)
     const data = await respuesta.json()
     const movies = data.results
     //console.log(movies);
@@ -41,7 +48,7 @@ async function getMovieTendenciasPreview(){
 }
 
 async function getMovieCategoriesPreview(){
-    const respuesta = await fetch(`${URL}/genre/movie/list?api_key=${API_KEY}`)
+    const respuesta = await fetch(`${URL}/genre/movie/list?language=${lenguaje}&api_key=${API_KEY}`)
     const data = await respuesta.json()
     const categories = data.genres
     //console.log(categories);
@@ -71,7 +78,7 @@ async function getMovieCategoriesPreview(){
 }
 
 async function getMovieByCategory(id){
-    const respuesta = await fetch(`${URL}/discover/movie?with_genres=${id}&api_key=${API_KEY}`)
+    const respuesta = await fetch(`${URL}/discover/movie?with_genres=${id}&language=${lenguaje}&api_key=${API_KEY}`)
     const data = await respuesta.json()
     const moviesTheCategory = data.results
     //console.log('idCategory',moviesTheCategory);
@@ -96,7 +103,7 @@ async function getMovieByCategory(id){
 
 
 async function getMoviesBySearch(query){
-    const respuesta = await fetch(`${URL}/search/movie?query=${query}&api_key=${API_KEY}`)
+    const respuesta = await fetch(`${URL}/search/movie?query=${query}&language=${lenguaje}&api_key=${API_KEY}`)
     const data = await respuesta.json()
     const moviesSearch = data.results
     //console.log('moviesSearch',moviesSearch);
@@ -150,7 +157,7 @@ async function getGeneritedPageMovieTendencias (){
 }
 
 async function getMovieTendencias(){
-    const respuesta = await fetch(`${URL}/trending/movie/day?api_key=${API_KEY}`)
+    const respuesta = await fetch(`${URL}/trending/movie/day?language=${lenguaje}&api_key=${API_KEY}`)
     const data = await respuesta.json()
     const movies = data.results
 
@@ -201,7 +208,7 @@ function createCategories(categories, container) {
   }
 
 async function getMovieById(id){
-    const respuesta = await fetch(`${URL}/movie/${id}?api_key=${API_KEY}`)
+    const respuesta = await fetch(`${URL}/movie/${id}?language=${lenguaje}&api_key=${API_KEY}`)
     const movie = await respuesta.json()
 
     headerSection.innerHTML = ''
@@ -318,7 +325,7 @@ function createMovies(movies, container, {lazyLoad = false, clean = true} = {}) 
 async function getSimilaresMovieId(id){
     
     ///movie/${id}/similar or /movie/${id}/recommendations
-    const resonse = await fetch(`${URL}/movie/${id}/similar?api_key=${API_KEY}`)
+    const resonse = await fetch(`${URL}/movie/${id}/similar?language=${lenguaje}&api_key=${API_KEY}`)
     const data = await resonse.json()
     const similares = data.results
 
@@ -330,7 +337,7 @@ function getLikedMovies(){
   const listArray = Object.values(list)
 
   createMovies(listArray,likedMoviesListArticle, {lazyLoading:true, clean:true})
-  console.log(list);
+  //console.log(list);
 
 
 }
@@ -345,7 +352,8 @@ export { getMovieCategoriesPreview,
     getMovieTendencias,
     getMovieById,
     getGeneritedPageMovieTendencias,
-    getLikedMovies}
+    getLikedMovies,
+    getIdioma}
 
 
 // getMovieTendenciasPreview()
